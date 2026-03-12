@@ -22,54 +22,59 @@ int main() {
     string text;
     string key;
 
-    cout << "1 - Pagrindinis rezimas." << endl;
-    cout << "2 - Isplestinis rezimas." << endl;
-    cout << "0 - Pabaigti programa." << endl;
-    cout << "Pasirinkite 1 arba 2: ";
-    cin >> choice;
+    while (true) {
+        cout << "1 - Pagrindinis rezimas." << endl;
+        cout << "2 - Isplestinis rezimas." << endl;
+        cout << "0 - Pabaigti programa." << endl;
+        cout << "Pasirinkite 0, 1 arba 2: ";
+        cin >> choice;
 
-    if (choice == 1) {
         cin.ignore();
 
-        cout << "Iveskite teksta: " << endl;
-        getline(cin, text);
-
-        cout << "Iveskite rakta: " << endl;
-        getline(cin, key);
-
-        if (key.empty()) {
-            cout << "Raktas negali buti tuscias." << endl;
+        if (choice == 0) {
+            cout << "Programa baigta." << endl;
             return 0;
         }
 
-        string encrypted = encryptedBasic(text, key, alphabet, 26);
-        cout << "Uzsifruotas tekstas: " << encrypted << endl;
+        if (choice == 1) {
+            cout << "Iveskite teksta: " << endl;
+            getline(cin, text);
 
-        string decrypted = decryptedBasic(encrypted, key, alphabet, 26);
-        cout << "Desifruotas tekstas: " << decrypted << endl;
-    } else if (choice == 2) {
-        cin.ignore();
+            cout << "Iveskite rakta: " << endl;
+            getline(cin, key);
 
-        cout << "Iveskite teksta: " << endl;
-        getline(cin, text);
+            if (key.empty()) {
+                cout << "Raktas negali buti tuscias." << endl;
+                continue;
+            }
 
-        cout << "Iveskite rakta: " << endl;
-        getline(cin, key);
+            string encrypted = encryptedBasic(text, key, alphabet, 26);
+            cout << "Uzsifruotas tekstas: " << encrypted << endl;
 
-        if (key.empty()) {
-            cout << "Raktas negali buti tuscias." << endl;
-            return 0;
+            string decrypted = decryptedBasic(encrypted, key, alphabet, 26);
+            cout << "Desifruotas tekstas: " << decrypted << endl;
+        } else if (choice == 2) {
+            cout << "Iveskite teksta: " << endl;
+            getline(cin, text);
+
+            cout << "Iveskite rakta: " << endl;
+            getline(cin, key);
+
+            if (key.empty()) {
+                cout << "Raktas negali buti tuscias." << endl;
+                continue;
+            }
+
+            string encrypted = encryptExtended(text, key);
+            cout << "Uzsifruotas tekstas: " << encrypted << endl;
+
+            string decrypted = decryptExtended(encrypted, key);
+            cout << "Desifruotas tekstas: " << decrypted << endl;
+        } else {
+            cout << "Neteisingas pasirinkimas. Bandykite dar karta." << endl;
         }
 
-        string encrypted = encryptExtended(text, key);
-        cout << "Uzsifruotas tekstas: " << encrypted << endl;
-
-        string decrypted = decryptExtended(encrypted, key);
-        cout << "Desifruotas tekstas: " << decrypted << endl;
-    }
-    else {
-        cout << "Programa baigta." << endl;
-        return 0;
+        cout << endl;
     }
 }
 
@@ -159,8 +164,8 @@ string encryptExtended(string text, string key) {
     const int RANGE = ASCII_END - ASCII_START + 1;
 
     for (int i = 0; i < (int) text.length(); i++) {
-        unsigned char ch = (unsigned char) text[i];
-        unsigned char k = (unsigned char) key[i % key.length()];
+        unsigned char ch = (unsigned char)text[i];
+        unsigned char k = (unsigned char)key[i % key.length()];
 
         if (ch < ASCII_START || ch > ASCII_END) {
             result[i] = text[i];
@@ -170,7 +175,7 @@ string encryptExtended(string text, string key) {
         int idx = ch - ASCII_START;
         int shift = k - ASCII_START;
 
-        result[i] = (char) (ASCII_START + ((idx + shift) % RANGE));
+        result[i] = (char)(ASCII_START + ((idx + shift) % RANGE));
     }
     return result;
 }
@@ -183,8 +188,8 @@ string decryptExtended(string text, string key) {
     const int RANGE = ASCII_END - ASCII_START + 1;
 
     for (int i = 0; i < (int) text.length(); i++) {
-        unsigned char ch = (unsigned char) text[i];
-        unsigned char k = (unsigned char) key[i % key.length()];
+        unsigned char ch = (unsigned char)text[i];
+        unsigned char k = (unsigned char)key[i % key.length()];
 
         if (ch < ASCII_START || ch > ASCII_END) {
             result[i] = text[i];
@@ -194,7 +199,7 @@ string decryptExtended(string text, string key) {
         int idx = ch - ASCII_START;
         int shift = k - ASCII_START;
 
-        result[i] = (char) (ASCII_START + ((idx - shift + RANGE) % RANGE));
+        result[i] = (char)(ASCII_START + ((idx - shift + RANGE) % RANGE));
     }
     return result;
 }
